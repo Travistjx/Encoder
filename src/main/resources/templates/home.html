@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Encoder</title>
+        <style>
+            /* Overall page settings */
+            * {
+                font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+            }
+
+            /* Page Header */
+            h1 {
+                margin-top: 100px;
+                text-align: center;
+            }
+
+            /* Area that user can interact with */
+            .interactableArea {
+                margin-top: 50px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 50px;
+            }
+
+            /* Settings for encoder and decoder area */
+            .encoderArea, .decoderArea {
+                width: 35%;
+                box-sizing: border-box;
+            }
+
+            textarea {
+                width: 100%;
+                height: 100px;
+                margin: 5px 0;
+                padding: 10px;
+            }
+
+            button {
+                background-color: lightgreen;
+                border: 1px solid grey;
+                padding: 10px;
+            }
+
+            button:hover {
+                transform: scale(1.05);
+                cursor: pointer;
+            }
+
+            /* Settings for simple navbar */
+            .navbar {
+                background-color: lightgreen;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                padding: 20px;
+                width: 100%;
+            }
+        </style>
+        <script>
+            /* Submit encoder form when button is pressed */
+            function submitEncodeForm() {
+                let form = document.getElementById("encodeForm");
+
+                if (form.checkValidity()) {
+                    form.submit();
+                } else {
+                    alert("Please fill in the required fields.");
+                }
+            }
+
+            /* Submit encoder form when button is pressed */
+            function submitDecodeForm() {
+                let form = document.getElementById("decodeForm");
+
+                if (form.checkValidity()) {
+                    form.submit();
+                } else {
+                    alert("Please fill in the required fields.");
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class = "navbar">Encoder</nav>
+
+        <!-- Header -->
+        <h1>Encoder / Decoder</h1>
+
+        <!-- Area that user can interact with -->
+        <div class = "interactableArea">
+
+            <!-- Encoder area -->
+            <div class = "encoderArea">
+
+                <!-- Form to take in text to be encoded -->
+                <form method = "post" id = "encodeForm">
+                    <label for = "inputTextEncoder" >Encode Text</label><br/>
+                    <textarea name = "inputTextEncoder" id = "inputTextEncoder" th:text = "${textToEncode}"
+                              placeholder = "Enter in the text you want to encode." required></textarea><br/>
+
+                    <!-- Hidden value for the type of operation (encode/decode) -->
+                    <input type="hidden" name="operation" value="encode">
+
+                    <!-- Hidden values to store any values in decoded area -->
+                    <input type="hidden" name="inputTextDecoder" th:value = "${textToDecode}">
+                    <input type="hidden" name="decodedResult" th:value = "${decodedText}">
+                </form>
+
+                <!-- Encoded Result-->
+                <label for = "encodedResult" >Result</label><br/>
+                <textarea name = "encodedResult" id = "encodedResult" placeholder = "Encoded Text"
+                          th:text="${encodedText}"></textarea>
+
+                <div style = "display: flex; justify-content: space-between;">
+                    <!-- Error message -->
+                    <span th:text = "${errorMessage}"></span>
+
+                    <!-- Encode/Submit Button -->
+                    <div style="text-align: right; margin-top: 10px;">
+                        <button type="button" onclick="submitEncodeForm()">Encode</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decoder area -->
+            <div class = "decoderArea">
+
+                <!-- Form to take in text to be decoded -->
+                <form  method = "post" id = "decodeForm">
+                    <label for = "inputTextDecoder" >Decode Text</label><br/>
+                    <textarea name = "inputTextDecoder" id =  "inputTextDecoder" th:text = "${textToDecode}"
+                              placeholder = "Enter in the text you want to decode." required></textarea><br/>
+
+                    <!-- Hidden value for the type of operation (encode/decode) -->
+                    <input type="hidden" name="operation" value="decode">
+
+                    <!-- Hidden values to store any values in encoded area -->
+                    <input type="hidden" name="inputTextEncoder" th:value = "${textToEncode}">
+                    <input type="hidden" name="encodedResult" th:value = "${encodedText}">
+                </form>
+
+                <!-- Decoded Result-->
+                <label for = "decodedResult" >Result</label><br/>
+                <textarea name = "decodedResult" id =  "decodedResult" placeholder = "Decoded Text"
+                          th:text="${decodedText}"></textarea>
+
+                <!-- Decode/Submit Button -->
+                <div style="text-align: right; margin-top: 10px;">
+                    <button type="button" onclick="submitDecodeForm()">Decode</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
